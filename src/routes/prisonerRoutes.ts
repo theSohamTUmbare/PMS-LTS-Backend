@@ -5,11 +5,7 @@ import "dotenv/config";
 
 const router = express.Router();
 
-router.post("/all",controller.getPrisoners);
+router.get("/all",controller.getPrisoners);
 router.post("/add",);
-
-router.put("/add", async (req: Request, res: Response) => {
-    
-});
 
 export default router;
