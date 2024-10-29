@@ -30,3 +30,15 @@ CREATE TABLE Cells (
     security_level VARCHAR(10) CHECK (security_level IN ('Low', 'Medium', 'High')),
     guard_assignments JSON
 );
+
+CREATE TABLE admins (
+  admin_id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  username VARCHAR(40) UNIQUE,
+  password VARCHAR(100),
+  contact_info INTEGER
+)
+
+
+
+
