@@ -17,7 +17,7 @@ app.get("/api/test", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/prisoner", prisonerRoutes);
-app.use("/api/staff",staffRoutes);
+app.use("/api/v1/staff",staffRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
 app.listen(7000, () => {
