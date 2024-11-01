@@ -85,7 +85,7 @@ export const updateStaff = async (req: Request, res: Response): Promise<void> =>
             return;
         }
 
-        const finalUpdateData: Staff = {
+        const finalUpdateData: Staff = { //to only update the field that is required
             ...existingStaff,
             ...updatedFields,
             staff_id: existingStaff.staff_id // to retain the original staff id

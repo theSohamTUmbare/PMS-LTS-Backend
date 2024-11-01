@@ -4,9 +4,10 @@ import cors from 'cors';
 import "dotenv/config";
 import prisonerRoutes from './routes/prisonerRoutes';
 <<<<<<< HEAD
-import staffRoutes from './routes/StaffRoutes';
+
 =======
 import adminRoutes from './routes/authRoutes';
+import staffRoutes from './routes/StaffRoutes';
 >>>>>>> 56d3f918062a22b7c2ccdc8c31210db092c48e54
 
 const app = express();
@@ -21,10 +22,11 @@ app.get("/api/test", (req: Request, res: Response) => {
 
 app.use("/api/v1/prisoner", prisonerRoutes);
 <<<<<<< HEAD
-app.use("/api/staff",staffRoutes);
+
 
 =======
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/staff",staffRoutes);
 >>>>>>> 56d3f918062a22b7c2ccdc8c31210db092c48e54
 
 app.listen(7000, () => {
