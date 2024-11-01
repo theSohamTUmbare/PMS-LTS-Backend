@@ -30,7 +30,6 @@ CREATE TABLE Cells (
     security_level VARCHAR(10) CHECK (security_level IN ('Low', 'Medium', 'High')),
     guard_assignments JSON
 );
-
 CREATE TABLE staff(
     staff_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
