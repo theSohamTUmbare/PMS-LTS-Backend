@@ -17,7 +17,7 @@ export interface Prisoner {
 }
 
 class PrisonerModel {
-    static getPrisoners = async (page: number = 1, limit: number = 50): Promise<Prisoner[]> => {
+    static getPrisoners = async (page: number = 1, limit: number = 20): Promise<Prisoner[]> => {
         try {
             const offset = (page - 1) * limit;
             const result = await db.query("SELECT * FROM prisoners LIMIT $1 OFFSET $2", [limit, offset]);
@@ -27,7 +27,17 @@ class PrisonerModel {
             throw new Error("Could not retrieve prisoners.");
         }
     }
-    
+
+    // Get count of prisoners for pagination
+    static getPrisonerCount = async (): Promise<number> => {
+        try {
+            const result = await db.query("SELECT COUNT(*) FROM prisoners");
+            return parseInt(result.rows[0].count, 10);
+        } catch (error) {
+            console.error("Error counting prisoners:", error);
+            throw new Error("Could not retrieve prisoner count.");
+        }
+    };
 
     static getPrisonerById = async (id: number): Promise<Prisoner | null> => {
         try {
@@ -60,15 +70,25 @@ class PrisonerModel {
             throw new Error("Could not retrieve prisoner by cell ID.");
         }
     }
-    
+
     static getPrisonerByTrackingDeviceId = async (trackingDeviceId: number): Promise<Prisoner | null> => {
         try {
             const result = await db.query("SELECT * FROM prisoners WHERE tracking_device_id = $1", [trackingDeviceId]);
             return result.rows.length ? result.rows[0] : null;
-            
-        } catch(error){
+        } catch(error) {
             console.error(`Error fetching prisoner with tracking device ID ${trackingDeviceId}:`, error);
             throw new Error("Could not retrieve prisoner by tracking device id.");
+        }
+    }
+
+    // Get prisoners by status
+    static getPrisonersByStatus = async (status: Prisoner['status']): Promise<Prisoner[]> => {
+        try {
+            const result = await db.query("SELECT * FROM prisoners WHERE status = $1", [status]);
+            return result.rows;
+        } catch (error) {
+            console.error(`Error fetching prisoners with status ${status}:`, error);
+            throw new Error("Could not retrieve prisoners by status.");
         }
     }
 
@@ -84,38 +104,57 @@ class PrisonerModel {
         }
     }
 
-    // Model method for updating a prisoner
-static updatePrisoner = async (id: number, updates: Partial<Prisoner>): Promise<void> => {
-    try {
-        await db.query(
-            `UPDATE prisoners 
-             SET first_name = COALESCE($1, first_name), 
-                 last_name = COALESCE($2, last_name), 
-                 date_of_birth = COALESCE($3, date_of_birth), 
-                 gender = COALESCE($4, gender), 
-                 national_id = COALESCE($5, national_id), 
-                 entry_date = COALESCE($6, entry_date), 
-                 status = COALESCE($7, status), 
-                 cell_id = COALESCE($8, cell_id) 
-             WHERE prisoner_id = $9`,
-            [
-                updates.first_name || null,
-                updates.last_name || null,
-                updates.date_of_birth || null,
-                updates.gender || null,
-                updates.national_id || null,
-                updates.entry_date || null,
-                updates.status || null,
-                updates.cell_id || null,
-                id
-            ]
-        );
-    } catch (error) {
-        console.error(`Error updating prisoner with ID ${id}:`, error);
-        throw new Error("Could not update prisoner.");
-    }
-};
+    // Advanced search for prisoners by multiple criteria
+    static searchPrisoners = async (criteria: Partial<Prisoner>): Promise<Prisoner[]> => {
+        const keys = Object.keys(criteria);
+        const values = Object.values(criteria);
+        
+        if (!keys.length) {
+            throw new Error("No criteria provided for search.");
+        }
 
+        const conditions = keys.map((key, index) => `${key} = $${index + 1}`).join(" AND ");
+        const query = `SELECT * FROM prisoners WHERE ${conditions}`;
+
+        try {
+            const result = await db.query(query, values);
+            return result.rows;
+        } catch (error) {
+            console.error("Error searching prisoners:", error);
+            throw new Error("Could not search prisoners.");
+        }
+    }
+
+    static updatePrisoner = async (id: number, updates: Partial<Prisoner>): Promise<void> => {
+        try {
+            await db.query(
+                `UPDATE prisoners 
+                 SET first_name = COALESCE($1, first_name), 
+                     last_name = COALESCE($2, last_name), 
+                     date_of_birth = COALESCE($3, date_of_birth), 
+                     gender = COALESCE($4, gender), 
+                     national_id = COALESCE($5, national_id), 
+                     entry_date = COALESCE($6, entry_date), 
+                     status = COALESCE($7, status), 
+                     cell_id = COALESCE($8, cell_id) 
+                 WHERE prisoner_id = $9`,
+                [
+                    updates.first_name || null,
+                    updates.last_name || null,
+                    updates.date_of_birth || null,
+                    updates.gender || null,
+                    updates.national_id || null,
+                    updates.entry_date || null,
+                    updates.status || null,
+                    updates.cell_id || null,
+                    id
+                ]
+            );
+        } catch (error) {
+            console.error(`Error updating prisoner with ID ${id}:`, error);
+            throw new Error("Could not update prisoner.");
+        }
+    }
 
     static deletePrisoner = async (id: number): Promise<void> => {
         try {

@@ -3,15 +3,25 @@ import PrisonerModel, {Prisoner} from "../models/prisoner";
 
 export const getPrisoners = async (req: Request, res: Response): Promise<void> => {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 50;
+    const limit = parseInt(req.query.limit as string) || 20;
 
     try {
+        const totalPrisoners = await PrisonerModel.getPrisonerCount();
+        const totalPages = Math.ceil(totalPrisoners / limit);
+
         const prisoners = await PrisonerModel.getPrisoners(page, limit);
-        res.json(prisoners);
+
+        res.json({
+            prisoners,
+            currentPage: page,
+            totalPages,
+            totalPrisoners,
+        });
     } catch (error) {
-        res.status(500).json({message: "Error Retreiving the prisoners" });
+        res.status(500).json({ message: "Error Retrieving the prisoners" });
     }
 };
+
 
 export const getPrisonersById  = async (req: Request, res: Response): Promise<void> => {
     const id = parseInt(req.params.id);

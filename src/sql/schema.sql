@@ -37,7 +37,7 @@ CREATE TABLE admins (
   username VARCHAR(40) UNIQUE,
   password VARCHAR(100),
   contact_info INTEGER
-)
+);
 
 CREATE TABLE staff(
     staff_id SERIAL PRIMARY KEY,

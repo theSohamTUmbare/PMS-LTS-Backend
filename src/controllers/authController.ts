@@ -63,5 +63,5 @@ export const adminLogout = (req: Request, res: Response) => {
 }
 
 export const checkToken = (req: Request, res: Response) => {
-  res.status(200).send({ userId: req.userId, name: req.name });
+  res.status(200).send({ isAuthenticated: true, userId: req.userId, name: req.name });
 }
