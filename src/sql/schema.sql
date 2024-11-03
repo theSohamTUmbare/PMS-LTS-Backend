@@ -37,14 +37,31 @@ CREATE TABLE admins (
   username VARCHAR(40) UNIQUE,
   password VARCHAR(100),
   contact_info INTEGER
-)
+);
 
 CREATE TABLE staff(
     staff_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
+    role VARCHAR(50),
     badge_number INT UNIQUE,
     rank INT,
     department VARCHAR(10),
     contact_info JSON  --information can include number address etc
+);
+
+CREATE TABLE staff_approval (
+    approval_id SERIAL PRIMARY KEY,
+    staff_id INT REFERENCES staff(staff_id) ON DELETE CASCADE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    badge_number INT UNIQUE NOT NULL,
+    rank INT,
+    department VARCHAR(10),
+    contact_info JSON,  
+    approval_status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approved_at TIMESTAMP,
+    approved_by INT REFERENCES admins(admin_id), 
+    rejection_reason TEXT  
 );
