@@ -3,8 +3,10 @@ import StaffModel, { Staff } from "../models/staff";
 
 export const getStaff = async (req: Request, res: Response) => {
     try {
-        const staff = await StaffModel.getStaff();
-        res.status(200).json({ data: staff, message: "Staff retrieved successfully." });
+        const page=parseInt(req.query.page as string)||1;
+        const limit=parseInt(req.query.limit as string)||50;
+        const staff = await StaffModel.getStaff(page,limit);
+        res.status(200).json(staff);
     } catch (error) {
         console.error("Error retrieving staff:", error);
         res.status(500).json({ message: "Error retrieving staff." });
@@ -59,7 +61,7 @@ export const getStaffById = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        res.status(200).json({ data: staff });
+        res.status(200).json(staff);
     } catch (error) {
         console.error("Error fetching staff by ID:", error);
         res.status(500).json({ message: "Error fetching staff by ID." });
@@ -130,13 +132,15 @@ export const deleteStaff = async (req: Request, res: Response): Promise<void> =>
 export const getStaffByRole = async (req: Request, res: Response): Promise<void> => {
     try {
         const { role } = req.params;
-        const staffMembers = await StaffModel.getStaffByRole(role);
+        const page=parseInt(req.query.page as string)||1;
+        const limit =parseInt(req.query.limit as string)|| 50;
+        const staffMembers = await StaffModel.getStaffByRole(role,page, limit);
 
         if (staffMembers.length === 0) {
             res.status(404).json({ message: "No staff found with that role." });
         }
 
-        res.status(200).json({ data: staffMembers });
+        res.status(200).json(staffMembers);
     } catch (error) {
         console.error("Error fetching staff by role:", error);
         res.status(500).json({ message: "Error fetching staff by role." });
@@ -151,7 +155,7 @@ export const getDistinctRoles = async (req: Request, res: Response): Promise<voi
             res.status(404).json({ message: "No roles found with the staff" });
         }
 
-        res.status(200).json({ data: distinctRoles });
+        res.status(200).json(distinctRoles);
     } catch (error) {
         console.error("Error fetching distinct roles", error);
         res.status(500).json({ message: "Error fetching distinct roles" });

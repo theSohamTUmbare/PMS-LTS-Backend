@@ -12,9 +12,19 @@ export interface Staff {
 }
 
 class StaffModel {
-    static getStaff = async (): Promise<Staff[]> => {
+    // static getStaff = async (): Promise<Staff[]> => {
+    //     try {
+    //         const result = await db.query("SELECT * FROM staff");
+    //         return result.rows;
+    //     } catch (error) {
+    //         console.error("Error fetching staff:", error);
+    //         throw new Error("Could not retrieve staff.");
+    //     }
+    // }
+    static getStaff = async (page: number = 1, limit: number = 50): Promise<Staff[]> => {
         try {
-            const result = await db.query("SELECT * FROM staff");
+            const offset = (page - 1) * limit; // Calculate offset for pagination
+            const result = await db.query("SELECT * FROM staff ORDER BY staff_id LIMIT $1 OFFSET $2", [limit, offset]);
             return result.rows;
         } catch (error) {
             console.error("Error fetching staff:", error);
@@ -76,24 +86,26 @@ class StaffModel {
             throw new Error("Could not delete staff.");
         }
     }
-
-    static getStaffByRole = async (role: string): Promise<Staff[]> => {
+    // so basically this is how we add the page and limit per page for efficient handling 
+    static getStaffByRole = async (role: string, page: number = 1, limit: number = 50): Promise<Staff[]> => {
         try {
-            const result = await db.query("SELECT * FROM staff WHERE role=$1", [role]);
+            const offset = (page - 1) * limit;
+            const result = await db.query("SELECT * FROM staff WHERE role = $1 ORDER BY staff_id LIMIT $2 OFFSET $3", [role,limit,offset]);
             return result.rows; // Return all matching rows as an array
         } catch (error) {
             console.log(`Error fetching staff with role ${role}:`, error);
             throw new Error("Could not retrieve the staff by role");
         }
     }
-
     static getRoles = async (): Promise<{ role: string }[]> => {
         try {
-            const result = await db.query("SELECT DISTINCT role FROM Staff");
-            return result.rows; // Return all distinct roles
+            const roles = await db.query("SELECT DISTINCT role FROM staff");
+            return roles.rows;
+
         } catch (error) {
-            console.log("Error fetching unique roles:", error);
-            throw new Error("Could not retrieve the roles");
+
+            console.log(`Error fetching roles:`, error);
+            throw new Error("Could not retrieve the distinct roles")
         }
     }
 }
