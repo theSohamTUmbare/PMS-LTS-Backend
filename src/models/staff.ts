@@ -20,7 +20,7 @@ class StaffModel {
     //         console.error("Error fetching staff:", error);
     //         throw new Error("Could not retrieve staff.");
     //     }
-    // }
+    // }// without pagination
     static getStaff = async (page: number = 1, limit: number = 50): Promise<Staff[]> => {
         try {
             const offset = (page - 1) * limit; // Calculate offset for pagination
@@ -90,7 +90,7 @@ class StaffModel {
     static getStaffByRole = async (role: string, page: number = 1, limit: number = 50): Promise<Staff[]> => {
         try {
             const offset = (page - 1) * limit;
-            const result = await db.query("SELECT * FROM staff WHERE role = $1 ORDER BY staff_id LIMIT $2 OFFSET $3", [role,limit,offset]);
+            const result = await db.query("SELECT * FROM staff WHERE role = $1 ORDER BY staff_id LIMIT $2 OFFSET $3", [role, limit, offset]);
             return result.rows; // Return all matching rows as an array
         } catch (error) {
             console.log(`Error fetching staff with role ${role}:`, error);

@@ -52,10 +52,11 @@ CREATE TABLE staff(
 
 CREATE TABLE staff_approval (
     approval_id SERIAL PRIMARY KEY,
-    staff_id INT REFERENCES staff(staff_id) ON DELETE CASCADE,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    badge_number INT UNIQUE NOT NULL,
+    staff_id INT REFERENCES staff(staff_id) ,
+    first_name VARCHAR(50) ,
+    last_name VARCHAR(50) ,
+    role VARCHAR(10),
+    badge_number INT UNIQUE ,
     rank INT,
     department VARCHAR(10),
     contact_info JSON,  

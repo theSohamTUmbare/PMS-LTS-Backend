@@ -5,6 +5,7 @@ import "dotenv/config";
 import prisonerRoutes from './routes/prisonerRoutes';
 import staffRoutes from './routes/StaffRoutes';
 import adminRoutes from './routes/authRoutes';
+import admin_approvalRoutes from './routes/admin_approvalRoutes';
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.get("/api/test", (req: Request, res: Response) => {
 app.use("/api/v1/prisoner", prisonerRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/staff",staffRoutes);
+app.use("/api/v1/admin_approval",admin_approvalRoutes);
 
 app.listen(7000, () => {
     console.log("Server Running at localhost:7000")

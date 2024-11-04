@@ -1,4 +1,4 @@
-import express, { request, Response } from "express";
+import express, { Request, Response } from "express";
 import * as controller from "../controllers/staffController";
 import verifyToken from "../middlewares/authMiddleware";
 import "dotenv/config";
