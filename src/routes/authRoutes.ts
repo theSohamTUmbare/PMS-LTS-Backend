@@ -5,9 +5,9 @@ import "dotenv/config";
 
 const router = express.Router();
 
-router.post("/register", controller.adminRegister)
+router.post("/register",verifyToken, controller.adminRegister)
 router.post("/login", controller.adminLogin);
-router.post("/logout", controller.adminLogout);
-router.get("/verify-token", controller.checkToken);
+router.post("/logout", verifyToken,controller.adminLogout);
+router.get("/verify-token",verifyToken, controller.checkToken);
 
 export default router;

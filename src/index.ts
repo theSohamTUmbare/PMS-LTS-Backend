@@ -8,6 +8,7 @@ import prisonerRoutes from './routes/prisonerRoutes';
 import staffRoutes from './routes/StaffRoutes';
 import adminRoutes from './routes/authRoutes';
 import admin_approvalRoutes from './routes/admin_approvalRoutes';
+import cell_controls from './routes/cellControls'
 
 const app = express();
 app.use(express.json());
@@ -64,6 +65,7 @@ app.use("/api/v1/prisoner", prisonerRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/staff",staffRoutes);
 app.use("/api/v1/admin_approval",admin_approvalRoutes);
+app.use("/api/v1/cell_controls", cell_controls)
 
 server.listen(7000, () => {
     console.log("Server Running at localhost:7000")
