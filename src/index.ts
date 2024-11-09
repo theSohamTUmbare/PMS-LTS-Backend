@@ -7,6 +7,7 @@ import "dotenv/config";
 import prisonerRoutes from './routes/prisonerRoutes';
 import staffRoutes from './routes/StaffRoutes';
 import adminRoutes from './routes/authRoutes';
+import cell_controls from './routes/cellControls'
 import admin_approvalRoutes from './routes/admin_approvalRoutes';
 
 const app = express();
@@ -83,6 +84,7 @@ app.use("/api/v1/prisoner", prisonerRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/staff",staffRoutes);
 app.use("/api/v1/admin_approval",admin_approvalRoutes);
+app.use("/api/v1/cell_controls", cell_controls)
 
 server.listen(7000, () => {
   console.log("Server running at http://localhost:7000");
