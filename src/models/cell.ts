@@ -69,6 +69,7 @@ class CellModel {
     };
 
     static addOccupant = async (id: number): Promise<void> => {
+        console.log("got")
         try {
             await db.query("UPDATE cells SET current_occupants = current_occupants + 1 WHERE cell_id = $1", [id]);
         } catch (error) {
@@ -132,7 +133,7 @@ class CellModel {
                 "SELECT * FROM cells WHERE block = $1",
                 [block]
             );
-            console.log(result)
+            // console.log(result)
             return result.rows;
         } catch (error) {
             console.error("Error fetching cells by block:", error);

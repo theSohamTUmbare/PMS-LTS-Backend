@@ -67,6 +67,7 @@ export const deleteCell = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const addOccupant = async (req: Request, res: Response): Promise<void> =>{
+    console.log("got")
     const id = parseInt(req.params.id);
     try {
         await CellModel.addOccupant(id);
@@ -112,7 +113,7 @@ export const getBlocks = async (req: Request, res: Response): Promise<void> => {
 
 export const getCellsByBlock = async (req: Request, res: Response): Promise<void> => {
     const block = req.query.block as string;
-    console.log(block)
+    // console.log(block)
     try {
         let cells;
         
