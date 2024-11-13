@@ -68,7 +68,7 @@ app.use("/api/v1/admin_approval",admin_approvalRoutes);
 app.use("/api/v1/cell_controls", cell_controls)
 
 server.listen(7000, () => {
-    console.log("Server Running at localhost:7000")
+    console.log("Server Running at localhost:3000")
 });
 
 

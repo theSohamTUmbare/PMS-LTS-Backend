@@ -68,6 +68,15 @@ class CellModel {
         }
     };
 
+    static addOccupant = async (id: number): Promise<void> => {
+        try {
+            await db.query("UPDATE cells SET current_occupants = current_occupants + 1 WHERE cell_id = $1", [id]);
+        } catch (error) {
+            console.error("Error updating cell occupants:", error);
+            throw new Error("Could not update cell occupants.");
+        }
+    }
+
     static assignCell = async (block: string, sortBy: 'crowding' | 'security'): Promise<Pick<Cell, 'cell_id' | 'block' | 'capacity' | 'current_occupants' | 'security_level'>[]> => {
         
         let sortQuery = "";
@@ -95,6 +104,39 @@ class CellModel {
         } catch (error) {
             console.error("Error fetching sorted cells for assignment:", error);
             throw new Error("Could not retrieve sorted cells for assignment.");
+        }
+    };
+
+    static getBlocks = async (): Promise<string[]> => {
+        try {
+            const result = await db.query("SELECT DISTINCT block FROM cells");
+            return result.rows.map((row: { block: string }) => row.block);
+        } catch (error) {
+            console.error("Error fetching blocks:", error);
+            throw new Error("Could not retrieve blocks.");
+        }
+    };
+
+    static getCellsByBlock = async (block: string): Promise<Cell[]> => {
+        // Log the value of block
+        console.log("Block parameter:", block);
+    
+        // Validate the block input
+        if (!block || typeof block !== "string" || block === "NaN") {
+            throw new Error("Invalid block value specified.");
+        }
+        
+    
+        try {
+            const result = await db.query(
+                "SELECT * FROM cells WHERE block = $1",
+                [block]
+            );
+            console.log(result)
+            return result.rows;
+        } catch (error) {
+            console.error("Error fetching cells by block:", error);
+            throw new Error("Could not retrieve cells for the specified block.");
         }
     };
     

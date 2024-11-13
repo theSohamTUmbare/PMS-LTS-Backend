@@ -95,8 +95,8 @@ class PrisonerModel {
     static addPrisoner = async (prisoner: Prisoner): Promise<void> => {
         try {
             await db.query(
-                "INSERT INTO prisoners (first_name, last_name, date_of_birth, gender, national_id, entry_date, status) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-                [prisoner.first_name, prisoner.last_name, prisoner.date_of_birth, prisoner.gender, prisoner.national_id, prisoner.entry_date, prisoner.status]
+                "INSERT INTO prisoners (first_name, last_name, date_of_birth, gender, national_id, entry_date, status, cell_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+                [prisoner.first_name, prisoner.last_name, prisoner.date_of_birth, prisoner.gender, prisoner.national_id, prisoner.entry_date, prisoner.status, prisoner.cell_id]
             );
         } catch (error) {
             console.error("Error adding prisoner:", error);
