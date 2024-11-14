@@ -4,7 +4,7 @@ import StaffModel, { Staff } from "../models/staff";
 export const getStaff = async (req: Request, res: Response) => {
     try {
         const page=parseInt(req.query.page as string)||1;
-        const limit=parseInt(req.query.limit as string)||50;
+        const limit=parseInt(req.query.limit as string)||20;
         const staff = await StaffModel.getStaff(page,limit);
         res.status(200).json(staff);
     } catch (error) {
@@ -44,7 +44,7 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
         };
 
         await StaffModel.addStaff(newStaff);
-        res.status(201).json({ message: "Staff added successfully." });
+        res.status(200).json({ message: "Staff added successfully." });
     } catch (error) {
         console.error("Error adding staff:", error);
         res.status(500).json({ message: "Error adding staff." });
@@ -133,14 +133,16 @@ export const getStaffByRole = async (req: Request, res: Response): Promise<void>
     try {
         const { role } = req.params;
         const page=parseInt(req.query.page as string)||1;
-        const limit =parseInt(req.query.limit as string)|| 50;
+        const limit =parseInt(req.query.limit as string)|| 20;
         const staffMembers = await StaffModel.getStaffByRole(role,page, limit);
-
+        const totalStaff=staffMembers.length;
+        const totalPages=Math.ceil(totalStaff/limit);
         if (staffMembers.length === 0) {
             res.status(404).json({ message: "No staff found with that role." });
+            return;
         }
 
-        res.status(200).json(staffMembers);
+        res.status(200).json({staffMembers,totalStaff,currentPage:page, totalPages});
     } catch (error) {
         console.error("Error fetching staff by role:", error);
         res.status(500).json({ message: "Error fetching staff by role." });
@@ -153,6 +155,7 @@ export const getDistinctRoles = async (req: Request, res: Response): Promise<voi
 
         if (!distinctRoles || distinctRoles.length === 0) {
             res.status(404).json({ message: "No roles found with the staff" });
+            return ;
         }
 
         res.status(200).json(distinctRoles);

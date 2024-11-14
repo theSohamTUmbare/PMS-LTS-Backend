@@ -37,13 +37,13 @@ export const adminLogin = async (req: Request, res: Response): Promise<void> => 
     const token = jwt.sign(
       { id: admin.admin_id, name: admin.name },
       process.env.JWT_SECRET_KEY as string,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
 
     res.cookie("auth-token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge:  3600000, // 1 hour
+      maxAge:  3600000*24, // 1 hour
 
     });
 

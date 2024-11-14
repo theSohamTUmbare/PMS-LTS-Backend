@@ -5,13 +5,13 @@ import "dotenv/config";
 const router = express.Router();
 
 
-router.post('/submit', controller.submitApproval);
+router.post('/submit', verifyToken,controller.submitApproval);
 
-router.get('/pending', controller.getPendingApprovals);
+router.get('/pending', verifyToken,controller.getPendingApprovals);
 
-router.post('/approve/:approvalId', controller.approveApproval);
+router.post('/approve/:approvalId',verifyToken, controller.approveApproval);
 
-router.post('/reject/:approvalId', controller.rejectApproval);
+router.post('/reject/:approvalId', verifyToken,controller.rejectApproval);
 
 
 export default router;

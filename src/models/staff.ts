@@ -21,7 +21,7 @@ class StaffModel {
     //         throw new Error("Could not retrieve staff.");
     //     }
     // }// without pagination
-    static getStaff = async (page: number = 1, limit: number = 50): Promise<Staff[]> => {
+    static getStaff = async (page: number = 1, limit: number = 20): Promise<Staff[]> => {
         try {
             const offset = (page - 1) * limit; // Calculate offset for pagination
             const result = await db.query("SELECT * FROM staff ORDER BY staff_id LIMIT $1 OFFSET $2", [limit, offset]);
@@ -87,7 +87,7 @@ class StaffModel {
         }
     }
     // so basically this is how we add the page and limit per page for efficient handling 
-    static getStaffByRole = async (role: string, page: number = 1, limit: number = 50): Promise<Staff[]> => {
+    static getStaffByRole = async (role: string, page: number = 1, limit: number = 20): Promise<Staff[]> => {
         try {
             const offset = (page - 1) * limit;
             const result = await db.query("SELECT * FROM staff WHERE role = $1 ORDER BY staff_id LIMIT $2 OFFSET $3", [role, limit, offset]);

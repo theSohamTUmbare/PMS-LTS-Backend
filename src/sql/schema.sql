@@ -39,15 +39,18 @@ CREATE TABLE admins (
   contact_info INTEGER
 );
 
-CREATE TABLE staff(
+CREATE TABLE staff (
     staff_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     role VARCHAR(50),
     badge_number INT UNIQUE,
     rank INT,
-    department VARCHAR(10),
-    contact_info JSON  --information can include number address etc
+    department VARCHAR(50), -- Added department field
+    CONSTRAINT staff_department_check CHECK (department IN ('Patrol', 'CID', 'SWAT', 'Forensics')),
+    contact_info JSON, -- Information can include number, address, etc.
+    gender VARCHAR(10), -- Added gender field
+    national_id VARCHAR(50) -- Added national ID field
 );
 
 CREATE TABLE staff_approval (
