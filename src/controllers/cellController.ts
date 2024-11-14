@@ -15,6 +15,7 @@ export const getCells = async (req: Request, res: Response): Promise<void> => {
 // Get a specific cell by ID
 export const getCellById = async (req: Request, res: Response): Promise<void> => {
     const id = parseInt(req.params.id);
+    // console.log(req)
     try {
         const cell = await CellModel.getCellById(id);
         if (cell) {
@@ -65,6 +66,18 @@ export const deleteCell = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+export const addOccupant = async (req: Request, res: Response): Promise<void> =>{
+    console.log("got")
+    const id = parseInt(req.params.id);
+    try {
+        await CellModel.addOccupant(id);
+        res.status(200).json({ message: "Added occupant successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error added occupant" });
+    }
+}
+
 
 // Assign cells based on block and sorting criteria
 export const assignCell = async (req: Request, res: Response): Promise<void> => {
@@ -82,5 +95,39 @@ export const assignCell = async (req: Request, res: Response): Promise<void> => 
     } catch (error) {
         console.error("Error fetching recommended cells:", error);
         res.status(500).json({ message: "Error retrieving recommended cells." });
+    }
+};
+
+
+// Get distinct blocks
+export const getBlocks = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const blocks = await CellModel.getBlocks();
+        res.status(200).json({ data: blocks, message: "Blocks retrieved successfully" });
+    } catch (error) {
+        console.error("Error fetching blocks:", error);
+        res.status(500).json({ message: "Error retrieving blocks." });
+    }
+};
+
+
+export const getCellsByBlock = async (req: Request, res: Response): Promise<void> => {
+    const block = req.query.block as string;
+    // console.log(block)
+    try {
+        let cells;
+        
+        if (block) {
+            // Fetch cells for the specified block
+            cells = await CellModel.getCellsByBlock(block);
+        } else {
+            // Fetch all cells if no block is specified
+            cells = await CellModel.getCells();
+        }
+
+        res.status(200).json({ data: cells, message: "Cells retrieved successfully" });
+    } catch (error) {
+        console.error("Error retrieving cells:", error);
+        res.status(500).json({ message: "Error retrieving cells" });
     }
 };
