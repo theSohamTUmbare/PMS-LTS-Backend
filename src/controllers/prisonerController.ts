@@ -11,7 +11,7 @@ export const getPrisoners = async (req: Request, res: Response): Promise<void> =
 
         const prisoners = await PrisonerModel.getPrisoners(page, limit);
 
-        res.json({
+        res.status(200).json({
             prisoners,
             currentPage: page,
             totalPages,
@@ -20,7 +20,7 @@ export const getPrisoners = async (req: Request, res: Response): Promise<void> =
     } catch (error) {
         res.status(500).json({ message: "Error Retrieving the prisoners" });
     }
-};
+};   
 
 
 export const getPrisonersById  = async (req: Request, res: Response): Promise<void> => {
@@ -101,5 +101,23 @@ export const searchPrisonerByName = async (req: Request, res: Response): Promise
         res.status(500).json({ message: "Error retrieving prisoner by name." });
     }
 };
+
+export const search = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const criteria: Partial<Prisoner> = req.body;
+
+        if (!Object.keys(criteria).length) {
+            res.status(400).json({ error: "No criteria provided for search." });
+            return;
+        }
+
+        const prisoners = await PrisonerModel.searchPrisoners(criteria);
+
+        res.status(200).json(prisoners);
+    } catch (error) {
+        console.error("Error searching prisoners:", error);
+        res.status(500).json({ error: "Could not search prisoners." });
+    }
+}
 
 
