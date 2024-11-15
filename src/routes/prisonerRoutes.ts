@@ -6,10 +6,11 @@ import "dotenv/config";
 
 const router = express.Router();    
 
-router.get("/all", verifyToken, controller.getPrisoners);
-router.post("/add", verifyToken, controller.createPrisoner);
-router.put("/update/:id", verifyToken, controller.updatePrisoner);
-router.delete("/delete/:id", verifyToken, controller.deletePrisoner);
-router.get("/search", verifyToken, controller.searchPrisonerByName);
+router.get("/all", controller.getPrisoners);
+router.post("/add", controller.createPrisoner);
+router.put("/update/:id", controller.updatePrisoner);
+router.delete("/delete/:id", controller.deletePrisoner);
+router.get("/name", controller.searchPrisonerByName);
+router.post("/search", controller.search);
 
 export default router;
