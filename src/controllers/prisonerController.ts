@@ -47,6 +47,7 @@ export const  createPrisoner = async (req: Request, res: Response): Promise<void
 };
 
 export const updatePrisoner = async (req: Request, res: Response): Promise<void> => {
+    console.log("hi update")
     const data = req.body;
     const id = parseInt(req.params.id);
     try {

@@ -11,5 +11,6 @@ router.post("/add", verifyToken, controller.createPrisoner);
 router.put("/update/:id", verifyToken, controller.updatePrisoner);
 router.delete("/delete/:id", verifyToken, controller.deletePrisoner);
 router.get("/search", verifyToken, controller.searchPrisonerByName);
+router.get("/prisonerid/:id", verifyToken, controller.getPrisonersById);
 
 export default router;
