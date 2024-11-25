@@ -10,6 +10,7 @@ import adminRoutes from './routes/authRoutes';
 import cell_controls from './routes/cellControls';
 import admin_approvalRoutes from './routes/admin_approvalRoutes';
 import deviceRoutes from './routes/deviceRoutes';
+import geofenceRoutes from './routes/geofenceRoutes';
 
 const app = express();
 app.use(express.json());
@@ -78,6 +79,7 @@ app.use("/api/v1/staff", staffRoutes);
 app.use("/api/v1/admin_approval", admin_approvalRoutes);
 app.use("/api/v1/cell_controls", cell_controls);
 app.use("/api/v1/device", deviceRoutes);
+app.use("/api/v1/geofence", geofenceRoutes);
 
 server.listen(PORT, () => {
   console.log("Server running at http://localhost:7000");

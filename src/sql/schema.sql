@@ -66,3 +66,13 @@ CREATE TABLE staff_approval (
     approved_by INT REFERENCES admins(admin_id), 
     rejection_reason TEXT  
 );
+
+CREATE TABLE geofences (
+    geofence_id VARCHAR(60) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(15) CHECK (type IN ('Circle', 'Polygon', 'Rectangle')) NOT NULL,
+    radius FLOAT NULL,
+    center_lat FLOAT NULL,
+    center_lng FLOAT NULL,
+    coordinates JSON NULL
+);
