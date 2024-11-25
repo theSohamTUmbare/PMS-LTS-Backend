@@ -11,6 +11,15 @@ export const getAlerts = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ message: "Error retrieving alerts" });
     }
 };
+export const getPrisonerAlerts = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const alerts = await AlertModel.getPrisonerAlerts();
+        res.status(200).json({ data: alerts, message: "Alerts retrieved successfully" });
+    } catch (error) {
+        console.error("Error retrieving alerts:", error);
+        res.status(500).json({ message: "Error retrieving alerts" });
+    }
+};
 
 // Get a specific alert by ID
 export const getAlertById = async (req: Request, res: Response): Promise<void> => {

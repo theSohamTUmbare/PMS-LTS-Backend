@@ -21,6 +21,20 @@ class AlertModel {
         }
     };
 
+    static getPrisonerAlerts = async (): Promise<Alert[]> => {
+        try {
+            const result = await db.query(
+              "SELECT p.first_name, p.last_name, a.alert_type, a.date, a.timestamp, a.details " +
+              "FROM prisoners p INNER JOIN alerts a ON p.tracking_device_id = a.device_id"
+            );
+            console.log(result.rows);
+            return result.rows;
+        } catch (error) {
+            console.error("Error fetching alerts:", error);
+            throw new Error("Could not retrieve alerts.");
+        }
+    };
+
     // Fetch a specific alert by ID
     static getAlertById = async (alertId: number): Promise<Alert | null> => {
         try {
