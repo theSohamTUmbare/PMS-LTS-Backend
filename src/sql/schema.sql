@@ -76,3 +76,14 @@ CREATE TABLE geofences (
     center_lng FLOAT NULL,
     coordinates JSON NULL
 );
+
+
+CREATE TABLE alerts (
+    alert_id SERIAL PRIMARY KEY, -- Auto-incrementing primary key
+    device_id VARCHAR(255) NOT NULL,      -- Foreign key referencing the tracking_devices table
+    alert_type VARCHAR(20) NOT NULL CHECK (alert_type IN ('Informational', 'Warning', 'Critical')), -- Constraint for specific alert types
+    date DATE NOT NULL,          -- Date of the alert
+    timestamp TIMESTAMP NOT NULL, -- Exact time of the alert
+    details TEXT NOT NULL,       -- Text details of the alert
+    CONSTRAINT fk_device FOREIGN KEY (device_id) REFERENCES tracking_devices(device_id) ON DELETE CASCADE
+);

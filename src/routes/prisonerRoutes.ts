@@ -5,13 +5,13 @@ import "dotenv/config";
 
 const router = express.Router();    
 
-router.get("/all", verifyToken,verifyToken,controller.getPrisoners);
-router.post("/add", verifyToken,verifyToken, controller.createPrisoner);
-router.put("/update/:id", verifyToken,verifyToken, controller.updatePrisoner);
-router.delete("/delete/:id", verifyToken,verifyToken, controller.deletePrisoner);
-router.get("/search", verifyToken,verifyToken, controller.searchPrisonerByName);
-router.get("/prisonerid/:id", verifyToken,verifyToken, controller.getPrisonersById);
-
+router.get("/all", verifyToken,controller.getPrisoners);
+router.post("/add", verifyToken, controller.createPrisoner);
+router.put("/update/:id", verifyToken, controller.updatePrisoner);
+router.delete("/delete/:id", verifyToken, controller.deletePrisoner);
+// router.get("/searchname", verifyToken, controller.searchPrisonerByName);
+router.get("/prisonerid/:id", verifyToken, controller.getPrisonersById);
+router.post("/search", verifyToken, controller.search)
 router.get("/mobile/all",controller.getPrisoners);
 router.put("/mobile/update/:id", controller.updatePrisoner);
 
