@@ -136,9 +136,10 @@ class PrisonerModel {
                      national_id = COALESCE($5, national_id), 
                      entry_date = COALESCE($6, entry_date), 
                      status = COALESCE($7, status), 
-                     cell_id = COALESCE($8, cell_id), 
-                     tracking_device_id = COALESCE($9, tracking_device_id) 
-                 WHERE prisoner_id = $10`,
+                     cell_id = COALESCE($8, cell_id),
+                     behavior_record = COALESCE($9::json, behavior_record), 
+                     medical_history = COALESCE($10::json, medical_history) 
+                 WHERE prisoner_id = $11`,
                 [
                     updates.first_name || null,
                     updates.last_name || null,
@@ -148,7 +149,8 @@ class PrisonerModel {
                     updates.entry_date || null,
                     updates.status || null,
                     updates.cell_id || null,
-                    updates.tracking_device_id || null,
+                    updates.behavior_record ? JSON.stringify(updates.behavior_record) : null,
+                    updates.medical_history ? JSON.stringify(updates.medical_history) : null,
                     id
                 ]
             );
@@ -156,7 +158,8 @@ class PrisonerModel {
             console.error(`Error updating prisoner with ID ${id}:`, error);
             throw new Error("Could not update prisoner.");
         }
-    }
+    };
+    
 
     static deletePrisoner = async (id: number): Promise<void> => {
         try {
