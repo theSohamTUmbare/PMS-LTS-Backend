@@ -4,7 +4,9 @@ import L from "leaflet";
 export interface GeofenceCircle {
   geofence_id: string;
   name: string;
-  type: "Circle";
+  alert_type: 'Informational' | 'Warning' | 'Critical';
+  type: 'Positive' | 'Negative';
+  shape: "Circle";
   radius: number;
   center_lat: number;
   center_lng: number;
@@ -13,14 +15,18 @@ export interface GeofenceCircle {
 export interface GeofencePolygon {
   geofence_id: string;
   name: string;
-  type: "Polygon";
+  alert_type: 'Informational' | 'Warning' | 'Critical';
+  type: 'Positive' | 'Negative';
+  shape: "Polygon";
   coordinates: { lat: number; lng: number }[];
 }
 
 export interface GeofenceRectangle {
   geofence_id: string;
   name: string;
-  type: "Rectangle";
+  alert_type: 'Informational' | 'Warning' | 'Critical';
+  type: 'Positive' | 'Negative';
+  shape: "Rectangle";
   coordinates: { lat: number; lng: number }[];
 }
 
@@ -29,9 +35,9 @@ export type Geofence = GeofenceCircle | GeofencePolygon | GeofenceRectangle;
 class GeofenceModel {
   static getGeofences = async (): Promise<Geofence[]> => {
     try {
-      const circleResult = await db.query("SELECT * FROM geofences WHERE type = 'Circle'");
-      const polygonResult = await db.query("SELECT * FROM geofences WHERE type = 'Polygon'");
-      const rectangleResult = await db.query("SELECT * FROM geofences WHERE type = 'Rectangle'");
+      const circleResult = await db.query("SELECT * FROM geofences WHERE shape = 'Circle'");
+      const polygonResult = await db.query("SELECT * FROM geofences WHERE shape = 'Polygon'");
+      const rectangleResult = await db.query("SELECT * FROM geofences WHERE shape = 'Rectangle'");
       return [
         ...circleResult.rows,
         ...polygonResult.rows,
@@ -59,29 +65,31 @@ class GeofenceModel {
   static addGeofence(geofence: GeofenceRectangle): Promise<void>;
 
   // Single implementation
-  static async addGeofence(geofence: Geofence): Promise<void> {
+  static async addGeofence(geofence: Partial<Geofence>): Promise<void> {
     try {
-      if (geofence.type === "Circle") {
+      if (geofence.shape === "Circle") {
         // Handle Circle geofence
         await db.query(
-          "INSERT INTO geofences (geofence_id, name, type, radius, center_lat, center_lng) VALUES ($1, $2, $3, $4, $5, $6)",
+          "INSERT INTO geofences (geofence_id, name, alert_type, type, shape, radius, center_lat, center_lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
           [
             geofence.geofence_id,
             geofence.name,
+            geofence.alert_type,
             geofence.type,
+            geofence.shape,
             geofence.radius,
             geofence.center_lat,
             geofence.center_lng,
           ]
         );
-      } else if (geofence.type === "Polygon" || geofence.type === "Rectangle") {
+      } else if (geofence.shape === "Polygon" || geofence.shape === "Rectangle") {
         // Handle Polygon or Rectangle geofence
         await db.query(
-          "INSERT INTO geofences (geofence_id, name, type, coordinates) VALUES ($1, $2, $3, $4)",
-          [geofence.geofence_id, geofence.name, geofence.type, JSON.stringify(geofence.coordinates)]
+          "INSERT INTO geofences (geofence_id, name, shape, coordinates) VALUES ($1, $2, $3, $4)",
+          [geofence.geofence_id, geofence.name, geofence.shape, JSON.stringify(geofence.coordinates)]
         );
       } else {
-        throw new Error("Unsupported geofence type.");
+        throw new Error("Unsupported geofence shape.");
       }
     } catch (error) {
       console.error("Error adding geofence:", error);
@@ -91,12 +99,7 @@ class GeofenceModel {
 
   static deleteGeofence = async (id: string): Promise<void> => {
     try {
-      // const geofence = await this.getGeofenceById(id);
-      // if (geofence) {
         await db.query("DELETE FROM geofences WHERE geofence_id = $1", [id]);
-      // }else{
-      //   throw new Error("Geofence not found");
-      // }
     } catch (error) {
         console.error("Error deleting geofence:", error);
         throw new Error("Could not delete geofence.");
