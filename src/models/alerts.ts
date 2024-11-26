@@ -53,18 +53,18 @@ class AlertModel {
     static addAlert = async (alert: Omit<Alert, "alert_id">): Promise<void> => {
         console.log(alert)
         const { device_id, alert_type, date, timestamp, details } = alert;
-        // Convert the date to a string in 'YYYY-MM-DD' format
-        const formattedDate = new Date(date).toISOString().split('T')[0];  // Extract 'YYYY-MM-DD' part
-        // Combine the formatted date and timestamp into a single string: 'YYYY-MM-DD HH:mm:ss'
-        const combinedDateString = `${formattedDate} ${timestamp}`;
-        // Create a Date object from the combined string
-        const localDate = new Date(combinedDateString);
+        // // Convert the date to a string in 'YYYY-MM-DD' format
+        // const formattedDate = new Date(date).toISOString().split('T')[0];  // Extract 'YYYY-MM-DD' part
+        // // Combine the formatted date and timestamp into a single string: 'YYYY-MM-DD HH:mm:ss'
+        // const combinedDateString = `${formattedDate} ${timestamp}`;
+        // // Create a Date object from the combined string
+        // const localDate = new Date(combinedDateString);
         
         try {
             await db.query(
                 `INSERT INTO alerts (device_id, alert_type, date, timestamp, details)
                  VALUES ($1, $2, $3, $4, $5)`,
-                [device_id, alert_type, date, localDate, details]
+                [device_id, alert_type, date, timestamp, details]
             );
         } catch (error) {
             console.error("Error adding alert:", error);

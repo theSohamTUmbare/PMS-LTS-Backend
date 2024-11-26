@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 1000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -89,5 +89,5 @@ app.use("/api/v1/geofence", geofenceRoutes);
 app.use("/api/v1/alert", alertRoutes)
 
 server.listen(PORT, () => {
-  console.log("Server running at http://localhost:7000");
+  console.log("Server running at http://localhost:1000");
 });
