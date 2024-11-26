@@ -4,8 +4,8 @@ import L from "leaflet";
 export interface GeofenceCircle {
   geofence_id: string;
   name: string;
-  alert_type: 'Informational' | 'Warning' | 'Critical';
-  type: 'Positive' | 'Negative';
+  alert_type: "Informational" | "Warning" | "Critical";
+  type: "Positive" | "Negative";
   shape: "Circle";
   radius: number;
   center_lat: number;
@@ -15,8 +15,8 @@ export interface GeofenceCircle {
 export interface GeofencePolygon {
   geofence_id: string;
   name: string;
-  alert_type: 'Informational' | 'Warning' | 'Critical';
-  type: 'Positive' | 'Negative';
+  alert_type: "Informational" | "Warning" | "Critical";
+  type: "Positive" | "Negative";
   shape: "Polygon";
   coordinates: { lat: number; lng: number }[];
 }
@@ -24,8 +24,8 @@ export interface GeofencePolygon {
 export interface GeofenceRectangle {
   geofence_id: string;
   name: string;
-  alert_type: 'Informational' | 'Warning' | 'Critical';
-  type: 'Positive' | 'Negative';
+  alert_type: "Informational" | "Warning" | "Critical";
+  type: "Positive" | "Negative";
   shape: "Rectangle";
   coordinates: { lat: number; lng: number }[];
 }
@@ -35,9 +35,15 @@ export type Geofence = GeofenceCircle | GeofencePolygon | GeofenceRectangle;
 class GeofenceModel {
   static getGeofences = async (): Promise<Geofence[]> => {
     try {
-      const circleResult = await db.query("SELECT * FROM geofences WHERE shape = 'Circle'");
-      const polygonResult = await db.query("SELECT * FROM geofences WHERE shape = 'Polygon'");
-      const rectangleResult = await db.query("SELECT * FROM geofences WHERE shape = 'Rectangle'");
+      const circleResult = await db.query(
+        "SELECT * FROM geofences WHERE shape = 'Circle'"
+      );
+      const polygonResult = await db.query(
+        "SELECT * FROM geofences WHERE shape = 'Polygon'"
+      );
+      const rectangleResult = await db.query(
+        "SELECT * FROM geofences WHERE shape = 'Rectangle'"
+      );
       return [
         ...circleResult.rows,
         ...polygonResult.rows,
@@ -51,13 +57,16 @@ class GeofenceModel {
 
   static getGeofenceById = async (id: string): Promise<Geofence | null> => {
     try {
-      const result = await db.query("SELECT * FROM geofences WHERE geofence_id = $1", [id]);
+      const result = await db.query(
+        "SELECT * FROM geofences WHERE geofence_id = $1",
+        [id]
+      );
       return result.rows[0] || null;
-      } catch (error) {
-        console.error("Error fetching geofence by id:", error);
-        throw new Error("Could not retrieve geofence by id.");
-        }
-  }
+    } catch (error) {
+      console.error("Error fetching geofence by id:", error);
+      throw new Error("Could not retrieve geofence by id.");
+    }
+  };
 
   // Overloaded function declarations
   static addGeofence(geofence: GeofenceCircle): Promise<void>;
@@ -82,11 +91,21 @@ class GeofenceModel {
             geofence.center_lng,
           ]
         );
-      } else if (geofence.shape === "Polygon" || geofence.shape === "Rectangle") {
+      } else if (
+        geofence.shape === "Polygon" ||
+        geofence.shape === "Rectangle"
+      ) {
         // Handle Polygon or Rectangle geofence
         await db.query(
-          "INSERT INTO geofences (geofence_id, name, shape, coordinates) VALUES ($1, $2, $3, $4)",
-          [geofence.geofence_id, geofence.name, geofence.shape, JSON.stringify(geofence.coordinates)]
+          "INSERT INTO geofences (geofence_id, name, alert_type, type, shape, coordinates) VALUES ($1, $2, $3, $4, $5, $6)",
+          [
+            geofence.geofence_id,
+            geofence.name,
+            geofence.alert_type,
+            geofence.type,
+            geofence.shape,
+            JSON.stringify(geofence.coordinates),
+          ]
         );
       } else {
         throw new Error("Unsupported geofence shape.");
@@ -99,12 +118,12 @@ class GeofenceModel {
 
   static deleteGeofence = async (id: string): Promise<void> => {
     try {
-        await db.query("DELETE FROM geofences WHERE geofence_id = $1", [id]);
+      await db.query("DELETE FROM geofences WHERE geofence_id = $1", [id]);
     } catch (error) {
-        console.error("Error deleting geofence:", error);
-        throw new Error("Could not delete geofence.");
+      console.error("Error deleting geofence:", error);
+      throw new Error("Could not delete geofence.");
     }
-  }
+  };
 }
 
 export default GeofenceModel;

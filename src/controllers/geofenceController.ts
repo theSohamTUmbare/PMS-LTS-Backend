@@ -20,17 +20,17 @@ export const getGeofences = async (req: Request, res: Response): Promise<void> =
 export const addGeofence = async (req: Request, res: Response): Promise<void> => {
   try {
     let geofence: Geofence;
-    if (req.body.type === "Circle") {
+    if (req.body.shape === "Circle") {
       geofence = req.body as GeofenceCircle;
       await GeofenceModel.addGeofence(geofence);
-    } else if (req.body.type === "Polygon") {
+    } else if (req.body.shape === "Polygon") {
       geofence = req.body as GeofencePolygon;
       await GeofenceModel.addGeofence(geofence);
-    } else if (req.body.type === "Rectangle") {
+    } else if (req.body.shape === "Rectangle") {
       geofence = req.body as GeofenceRectangle;
       await GeofenceModel.addGeofence(geofence);
     } else {
-      res.status(400).json({ message: "Invalid geofence type" });
+      res.status(400).json({ message: "Invalid geofence shape" });
       return;
     }
 

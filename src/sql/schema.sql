@@ -70,9 +70,9 @@ CREATE TABLE staff_approval (
 CREATE TABLE geofences (
     geofence_id VARCHAR(60) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    type VARCHAR(20) CHECK (type IN ('Informational', 'Warning', 'Critical')) NOT NULL,
-    alert_type VARCHAR(15) CHECK (type IN ('Positive', 'Negative')) NOT NULL,
-    shape VARCHAR(15) CHECK (type IN ('Circle', 'Polygon', 'Rectangle')) NOT NULL,
+    alert_type VARCHAR(20) CHECK (alert_type IN ('Informational', 'Warning', 'Critical')) NOT NULL,
+    type VARCHAR(15) CHECK (type IN ('Positive', 'Negative')) NOT NULL,
+    shape VARCHAR(15) CHECK (shape IN ('Circle', 'Polygon', 'Rectangle')) NOT NULL,
     radius FLOAT NULL,
     center_lat FLOAT NULL,
     center_lng FLOAT NULL,
