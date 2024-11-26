@@ -11,6 +11,7 @@ import cell_controls from './routes/cellControls';
 import admin_approvalRoutes from './routes/admin_approvalRoutes';
 import deviceRoutes from './routes/deviceRoutes';
 import geofenceRoutes from './routes/geofenceRoutes';
+import alertRoutes from './routes/alertRoutes'
 
 const app = express();
 app.use(express.json());
@@ -18,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 1000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -80,7 +81,8 @@ app.use("/api/v1/admin_approval", admin_approvalRoutes);
 app.use("/api/v1/cell_controls", cell_controls);
 app.use("/api/v1/device", deviceRoutes);
 app.use("/api/v1/geofence", geofenceRoutes);
+app.use("/api/v1/alert", alertRoutes)
 
 server.listen(PORT, () => {
-  console.log("Server running at http://localhost:7000");
+  console.log("Server running at http://localhost:1000");
 });
