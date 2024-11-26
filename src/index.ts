@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 7000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -58,6 +58,11 @@ io.on('connection', (socket) => {
     io.emit("locationUpdate", clientsLocations);
   });
 
+  socket.on('newAlert', (data) => {
+    console.log('New alert:', data);
+    io.emit('showAlert', data);
+  });
+
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     io.emit('userDisconnected', socket.id);
@@ -84,5 +89,5 @@ app.use("/api/v1/geofence", geofenceRoutes);
 app.use("/api/v1/alert", alertRoutes)
 
 server.listen(PORT, () => {
-  console.log("Server running at http://localhost:1000");
+  console.log("Server running at http://localhost:7000");
 });
