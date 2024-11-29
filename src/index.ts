@@ -17,13 +17,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: 'https://pms-lts-web.vercel.app'
+}));
 
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 7000;
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'https://pms-lts-web.vercel.app',
     methods: ["GET", "POST"],
   }
 });
@@ -89,5 +91,5 @@ app.use("/api/v1/geofence", geofenceRoutes);
 app.use("/api/v1/alert", alertRoutes)
 
 server.listen(PORT, () => {
-  console.log("Server running at http://localhost:1000");
+  console.log("Server running at http://localhost:7000");
 });
