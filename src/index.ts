@@ -17,9 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: 'https://pms-lts-web.vercel.app'
-}));
+app.use(cors());
 
 const PORT = process.env.PORT || 7000;
 const server = http.createServer(app);
