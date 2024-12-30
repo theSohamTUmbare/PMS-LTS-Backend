@@ -60,5 +60,30 @@ I was responsible for designing and implementing the **Prison Management System*
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/repository-name.git
-   cd repository-name
+   git clone https://github.com/theSohamTUmbare/PMS-LTS-Backend.git
+   cd PMS-LTS-Backend
+2. Install dependencies:
+   ```bash
+   npm install
+3. Create a .env file with the following variables:
+   ```bash
+   PGHOST=ep-shy-dream-a1wd0ll1.ap-southeast-1.aws.neon.tech
+   PGDATABASE=db
+   PGUSER=db_owner
+   PGPASSWORD=cPZ2frTnwgy0
+   PGPORT=5432n
+   JWT_SECRET_KEY=sardanajaan
+   PORT=7000
+4. Compile the TypeScript code:
+   ```bash
+   npm run build
+5. Run the project:
+   ```bash
+   npm start
+
+
+## Credits
+- Original Repository: https://github.com/Satyajeet-Das/PMS-LTS-Backend
+
+## Acknowledgments
+Special thanks to my teammates for their collaboration and support throughout this project.
