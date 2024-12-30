@@ -73,7 +73,6 @@ I was responsible for designing and implementing the **Prison Management System*
    PGPASSWORD=cPZ2frTnwgy0
    PGPORT=5432n
    JWT_SECRET_KEY=sardanajaan
-   PORT=7000
 4. Compile the TypeScript code:
    ```bash
    npm run build
