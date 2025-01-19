@@ -65,14 +65,14 @@ I was responsible for designing and implementing the **Prison Management System*
 2. Install dependencies:
    ```bash
    npm install
-3. Create a .env file with the following variables:
+3. Create a .env file with your variables:
    ```bash
-   PGHOST=ep-shy-dream-a1wd0ll1.ap-southeast-1.aws.neon.tech
-   PGDATABASE=db
-   PGUSER=db_owner
-   PGPASSWORD=cPZ2frTnwgy0
-   PGPORT=5432n
-   JWT_SECRET_KEY=sardanajaan
+   PGHOST=
+   PGDATABASE=
+   PGUSER=
+   PGPASSWORD=
+   PGPORT=
+   JWT_SECRET_KEY=
 4. Compile the TypeScript code:
    ```bash
    npm run build
